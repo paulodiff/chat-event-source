@@ -16,10 +16,10 @@ function Room(id) {
 require("util").inherits(Room, require("events").EventEmitter);
 
 Room.prototype.chat = function(chat) {
+  console.log("Room .. chat .. emit..");
   this.chats.unshift(chat);
   this.emit("chat", chat);
 };
 Room.prototype.latest = function() {
   return this.chats.slice(0, 20);
 };
-

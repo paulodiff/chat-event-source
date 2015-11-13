@@ -17,30 +17,40 @@ server.use(require("morgan")("short"));
 
 
 server.get("/rooms/:id/chats", fetchRoom, function(req, res) {
+  console.log("GET /rooms/:id/chats");
   res.send(res.locals.room.latest());
 });
 
 server.post("/rooms/:id/chats", fetchRoom, function(req, res) {
+  console.log("POST /rooms/:id/chats");
   var room = res.locals.room;
   room.chat(req.body);
-  res.send(200);
+  res.status(200).end();
 });
 
+
+// LIVE UPDATE!!!
 server.get("/rooms/:id/events", fetchRoom, function(req, res) {
+  console.log("GET /rooms/:id/events");
   var room = res.locals.room;
   var sse = startSses(res);
+  
   room.on("chat", sendChat);
       
   req.once("end", function() {
+    console.log("end req.once - removeListener");
     rooms.removeListener("chat", sendChat);
   });
        
   function sendChat(chat) {
+    console.log("sendChat ...");
     sse("chat", chat);
   }
 });
 
 server.get("/users/:id", function(req, res) {
+  console.log("GET /users/:id");
+  console.log(req.params.id);
   users.get(req.params.id, function(err, user) {
     if(err) {
       return res.send(404);
@@ -49,7 +59,9 @@ server.get("/users/:id", function(req, res) {
     res.send(user);
   });
 });
+
 server.post("/users", function(req, res) {
+  console.log("POST /users/:id");
   users.create(function(err, user) {
     if(err) {
       return res.send(500);
@@ -68,6 +80,7 @@ if(require.main === module) {
 }
 
 function startSses(res) {
+  console.log("START SSE");
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
@@ -76,6 +89,9 @@ function startSses(res) {
   res.write("\n");
 
   return function sendSse(name,data,id) {
+    console.log("sendSse:" + name);
+    console.log("sendSse:" + data);
+    console.log("sendSse:" + id);
     res.write("event: " + name + "\n");
     if(id) res.write("id: " + id + "\n");
     res.write("data: " + JSON.stringify(data) + "\n\n");

@@ -13,10 +13,13 @@ function ChatRoom($scope, chats, users) {
   $scope.user = users.loginOrSignup();
 
   $scope.user.$promise.then(function() {
+    console.log("chat demo: userid:" + $scope.user.id);
     $scope.chats = chats.forRoom("demo", $scope.user.id);
   });
 
   $scope.sendChat = function() {
+    console.log("sendChat newChat:");
+    console.log($scope.newChat);
     $scope.chats.send($scope.newChat)
       .then(resetChat, resetChat);
   }
@@ -27,12 +30,14 @@ function ChatRoom($scope, chats, users) {
 
   function resetChat() {
     $scope.newChat = {};
+    $scope.userName = "";
   }
 }
 
 function users($http, $q) {
   var api = {
     create: function() {
+      console.log("users:create");
       var user = {};
       user.$promise = $http.post('/users')
         .success(function(data) {
@@ -42,9 +47,11 @@ function users($http, $q) {
       return user;
     },
     me: function() {
+      console.log("users:me");
       return {id: parseInt(localStorage.userId), $promise: $q.when(true)};
     },
     loginOrSignup: function() {
+      console.log("users:loginOrSignup");
       if(localStorage.userId) {
         return this.me();
       }
@@ -61,8 +68,11 @@ function chats($http, $rootScope, EventSource) {
     var chats = [];
 
     // live-updates
+    console.log("EventSource: " + '/rooms/' + id  + "/events");
     var chatEvents = new EventSource('/rooms/' + id  + "/events");
     chatEvents.addEventListener("chat", function(event) {
+      console.log("listener chat:");
+      console.log(event);
       var chat = JSON.parse(event.data);
       if(chat.userId != userId) {
         chats.unshift(chat);

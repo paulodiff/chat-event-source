@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+ <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+  </head>
+<body ng-app="sse">
+<div class="container main" ng-controller="statCtrl">
+
+    <form  ng-submit="sendChat()" >
+        <fieldset>
+          <!-- <input ng-model=newChat.userName> -->
+           Unser:<input ng-model="userData.userName"/><br/>
+           Channel:<input ng-model="userData.channelId"/><br/>
+           Message:<input ng-model="userData.message"/><br/>
+           <button ng-click="connectAction()">connect</button>
+           <button ng-click="disconnectAction()">disconnect</button>
+           <button ng-click="statsAction()">stats</button>
+           <button ng-click="sendMessageAction()">send message</button>
+        </fieldset>
+      </form>
+    <div class="row">
+        <div class="span8 offset2">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Hostname:</td>
+                    <td>{{msg.hostname}}</td>
+                </tr>
+                <tr>
+                    <td>Type:</td>
+                    <td>{{msg.type}}</td>
+                </tr>
+                <tr>
+                    <td>Platform:</td>
+                    <td>{{msg.platform}}</td>
+                </tr>
+                <tr>
+                    <td>Arch:</td>
+                    <td>{{msg.arch}}</td>
+                </tr>
+                <tr>
+                    <td>Total mem:</td>
+                    <td>{{msg.totalmem}}</td>
+                </tr>
+                <tr>
+                    <td>Free mem:</td>
+                    <td>{{msg.freemem}}</td>
+                </tr>
+                <tr>
+                    <td>User List:</td>
+                    <td>{{userData.dataList}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="app-simple.js"></script>
+
+</body>
+</html>
