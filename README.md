@@ -14,3 +14,4 @@ npm install
 ```
 node server/server.js
 ```
+# angularjs-eventsource-nodejs 
