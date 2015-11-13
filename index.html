@@ -8,7 +8,7 @@
     <form  ng-submit="sendChat()" >
         <fieldset>
           <!-- <input ng-model=newChat.userName> -->
-           Unser:<input ng-model="userData.userName"/><br/>
+           User:<input ng-model="userData.userName"/><br/>
            Channel:<input ng-model="userData.channelId"/><br/>
            Message:<input ng-model="userData.message"/><br/>
            <button ng-click="connectAction()">connect</button>
@@ -55,6 +55,10 @@
                     <td>User List:</td>
                     <td>{{userData.dataList}}</td>
                 </tr>
+                <tr>
+                    <td>MESSAGE!!!!</td>
+                    <td>{{userData.sourceMsg}}</td>
+                </tr>                
                 </tbody>
             </table>
         </div>

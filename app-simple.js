@@ -15,13 +15,13 @@ function statCtrl($scope, $http) {
     $scope.msg = {};
     $scope.data = {};
     $scope.userData = {};
-    $scope.userData.userName = "TE#ST" + getRandomInt(1,100);
+    $scope.userData.userName = "User" + getRandomInt(1,100);
     $scope.userData.channelId = getRandomInt(1,100);
 
     $scope.connectAction = function(){
 
         if(sourceEvent.readyState != 1 ){
-            var url = "/stats?userName=" + $scope.userData.userName + "&" + "channelId=" + $scope.userData.channelId;
+            var url = "/eventsource?userName=" + $scope.userData.userName + "&" + "channelId=" + $scope.userData.channelId;
             console.log('connect!:'+ url);
             sourceEvent = new EventSource(url);
             sourceEvent.addEventListener('message', handleCallback, false);
@@ -36,7 +36,26 @@ function statCtrl($scope, $http) {
     };
 
     $scope.sendMessageAction = function(){
-        console.log('sendMessage');
+        console.log('sendMessageAction');
+        var url = '/sendMessage?msg=' + $scope.userData.message;
+        console.log(url);
+
+        $http({
+            method: 'GET',
+            url: url
+        }).then(function successCallback(response) {
+            console.log('OK');
+            console.log(response);
+            //$scope.userData.dataList = response.data;
+            // this callback will be called asynchronously
+            // when the response is available
+        }, function errorCallback(response) {
+            console.log(response);
+            console.log('ERR');
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            });
+
     };
 
 
@@ -66,13 +85,14 @@ function statCtrl($scope, $http) {
         //console.log('handleCallback');
         //console.log(msg);
         $scope.$apply(function () {
-            $scope.msg = JSON.parse(msg.data)
+            $scope.msg = JSON.parse(msg.data);
         });
     }
 
     var handlePopup = function (msg) {
+        console.log(msg);
         $scope.$apply(function () {
-            window.alert(msg);
+            $scope.userData.sourceMsg = msg.data;
         });
     } 
 

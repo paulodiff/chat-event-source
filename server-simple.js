@@ -40,6 +40,7 @@ app.get("/status", function(req, res) {
   console.log("GET /status ...");
   //console.log(util.inspect(openConnections));
 
+  // costruisce la lista delle connessioni e la invia in risposta
   var data = [];
   openConnections.forEach(function(resp) {
         data.push(resp.userName + " " + resp.channelId)
@@ -47,6 +48,8 @@ app.get("/status", function(req, res) {
   console.log(data);
   res.send(data);
 
+
+  // forza la generazione di messaggi
   openConnections.forEach(function(resp) {
         var d = new Date();
         console.log('STATS live to : ' + resp.userName + " " + d.getMilliseconds());
@@ -56,10 +59,28 @@ app.get("/status", function(req, res) {
 
 });
 
+// simple route to register the clients
+app.get('/sendMessage', function(req, res) {
+  console.log('/sendMessage');
+  console.log(req.query.msg);
+  res.send('ok');
+
+  // broadcast dei messaggi
+  
+  openConnections.forEach(function(resp) {
+        var d = new Date();
+        console.log('STATS live to : ' + req.query.msg + " " + d.getMilliseconds());
+        resp.write('event: popup\n');
+        resp.write('data:' + req.query.msg +   '\n\n'); // Note the extra newline
+  });
+
+});
+ 
 
 // simple route to register the clients
-app.get('/stats', function(req, res) {
+app.get('/eventsource', function(req, res) {
  
+    console.log('/eventsource');
     console.log(req.query.userName);
     console.log(req.query.channelId);
 
