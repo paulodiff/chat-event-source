@@ -1,24 +1,52 @@
 <!DOCTYPE html>
  <head>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.2/css/materialize.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.2/js/materialize.min.js"></script>
   </head>
 <body ng-app="sse">
 <div class="container main" ng-controller="statCtrl">
 
-    <form  ng-submit="sendChat()" >
+
+  <div class="row">
+
+    <form class="col s12"  ng-submit="sendChat()" >
         <fieldset>
-          <!-- <input ng-model=newChat.userName> -->
+          <!-- 
            User:<input ng-model="userData.userName"/><br/>
            Channel:<input ng-model="userData.channelId"/><br/>
            Message:<input ng-model="userData.message"/><br/>
-           <button ng-click="connectAction()">connect</button>
-           <button ng-click="disconnectAction()">disconnect</button>
-           <button ng-click="statsAction()">stats</button>
-           <button ng-click="sendMessageAction()">send message</button>
+        !-->
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="user" ng-model="userData.userName">
+          <label for="user">User</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="channel" ng-model="userData.channelId">
+          <label for="channel">Channel</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="message"  ng-model="userData.message">
+          <label for="message">Message</label>
+        </div>
+      </div>
+
+
+           <button class="waves-effect waves-light btn" ng-click="connectAction()"><i class="material-icons left">play_arrow</i></button>
+           <button class="waves-effect waves-light btn" ng-click="disconnectAction()">disconnect</button>
+           <button class="waves-effect waves-light btn" ng-click="statsAction()">stats</button>
+           <button class="waves-effect waves-light btn" ng-click="sendMessageAction()">send msg</button>
         </fieldset>
       </form>
+
+
     <div class="row">
         <div class="span8 offset2">
             <table class="table table-striped">
@@ -29,22 +57,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Hostname:</td>
-                    <td>{{msg.hostname}}</td>
-                </tr>
-                <tr>
-                    <td>Type:</td>
-                    <td>{{msg.type}}</td>
-                </tr>
-                <tr>
-                    <td>Platform:</td>
-                    <td>{{msg.platform}}</td>
-                </tr>
-                <tr>
-                    <td>Arch:</td>
-                    <td>{{msg.arch}}</td>
-                </tr>
                 <tr>
                     <td>Total mem:</td>
                     <td>{{msg.totalmem}}</td>

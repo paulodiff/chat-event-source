@@ -10,7 +10,6 @@ var util = require('util');
 // create the app
 var app = express();
  
-//app.use(express.static(__dirname + "/../client"));
 app.use(bodyParser.json());
 app.use(require("morgan")("short"));
 
@@ -23,7 +22,8 @@ app.use(require("morgan")("short"));
 //app.use(express.bodyParser());
 //app.use(express.methodOverride());
 //app.use(app.router);
-app.use(express.static(path.join(__dirname, '.')));
+app.use(express.static(__dirname + "./client"));
+//app.use(express.static(path.join(__dirname, '.')));
 
  
 // simple standard errorhandler
