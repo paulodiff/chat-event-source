@@ -11,7 +11,7 @@ angular.module('app.routes', [])
       
         
     .state('comuneDiRimini', {
-      url: '',
+      url: '/comunedirimini',
       templateUrl: 'templates/comuneDiRimini.html',
       controller: 'comuneDiRiminiCtrl'
     })

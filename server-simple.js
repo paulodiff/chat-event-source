@@ -22,8 +22,9 @@ app.use(require("morgan")("short"));
 //app.use(express.bodyParser());
 //app.use(express.methodOverride());
 //app.use(app.router);
-app.use(express.static(__dirname + "./client"));
-//app.use(express.static(path.join(__dirname, '.')));
+//app.use(express.static(__dirname + "./client"));
+console.log(path.join(__dirname, './client'));
+app.use(express.static(path.join(__dirname, './client')));
 
  
 // simple standard errorhandler
@@ -41,10 +42,37 @@ app.get("/status", function(req, res) {
   //console.log(util.inspect(openConnections));
 
   // costruisce la lista delle connessioni e la invia in risposta
-  var data = [];
+  var userOnChannelList = [];
+  var channelList = [];
+  var userList = [];
+  var data = {};
+  
   openConnections.forEach(function(resp) {
-        data.push(resp.userName + " " + resp.channelId)
+
+        //data.push(resp.userName + " " + resp.channelId);
+        if (channelList.indexOf(resp.channelId) == -1){
+          var jsonData = {};
+          jsonData["channelId"] = resp.channelId;
+          channelList.push(jsonData);
+        }
+        if (userList.indexOf(resp.userName) == -1){
+          var jsonData = {};
+          jsonData["userName"] = resp.userName;
+          userList.push(jsonData);
+        }
+
+        var jsonData = {};
+        jsonData["userOnChannel"] = resp.userName + " " + resp.channelId;
+        userOnChannelList.push(jsonData);
+
     });
+
+  data = {
+    "channelList" : channelList,
+    "userList" : userList,
+    "userOnChannelList": userOnChannelList
+  };
+
   console.log(data);
   res.send(data);
 
