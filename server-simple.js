@@ -32,12 +32,12 @@ app.use(express.static(path.join(__dirname, './client')));
 //  app.use(express.errorHandler());
 //});
  
-//---------------------------------------
-// mini app
-//---------------------------------------
 var openConnections = [];
+
+// get an instance of the router for api routes
+var apiRoutes = express.Router(); 
  
-app.get("/status", function(req, res) {
+apiRoutes.get("/status", function(req, res) {
   console.log("GET /status ...");
   //console.log(util.inspect(openConnections));
 
@@ -88,7 +88,7 @@ app.get("/status", function(req, res) {
 });
 
 // simple route to register the clients
-app.get('/sendMessage', function(req, res) {
+apiRoutes.get('/sendMessage', function(req, res) {
   console.log('/sendMessage');
   console.log(req.query.msg);
   res.send('ok');
@@ -106,7 +106,7 @@ app.get('/sendMessage', function(req, res) {
  
 
 // simple route to register the clients
-app.get('/eventsource', function(req, res) {
+apiRoutes.get('/eventsource', function(req, res) {
  
     console.log('/eventsource');
     console.log(req.query.userName);
@@ -180,6 +180,9 @@ function createMsg() {
 //})
 
 
- app.listen(PORT, function() {
+// apply the routes to our application with the prefix /api
+app.use('/rtmsg', apiRoutes);
+
+app.listen(PORT, function() {
            console.log("listening on %d", PORT);
          });

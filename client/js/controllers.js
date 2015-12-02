@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
   
-.controller('eventSourceCtrl', function($scope, $http) {
+.controller('eventSourceCtrl', function($scope, $http, Restangular) {
 
 
     function getRandomInt(min, max) {
@@ -41,7 +41,7 @@ angular.module('app.controllers', [])
     $scope.connectAction = function(){
 
         if(sourceEvent.readyState != 1 ){
-            var url = "/eventsource?userName=" + $scope.userData.userName + "&" + "channelId=" + $scope.userData.channelId;
+            var url = "/rtmsg/eventsource?userName=" + $scope.userData.userName + "&" + "channelId=" + $scope.userData.channelId;
             console.log('connect!:'+ url);
             sourceEvent = new EventSource(url);
             sourceEvent.addEventListener('message', handleCallback, false);
@@ -63,8 +63,28 @@ angular.module('app.controllers', [])
         }
 
         console.log('sendMessageAction');
-        var url = '/sendMessage';
+        var url = '/rtmsg/sendMessage';
         console.log(url);
+
+
+
+        Restangular.all('sendMessage').getList({
+                msg: $scope.userData.message,
+                userName: $scope.userData.userName,
+                channelId : $scope.userData.channelId
+            })  // GET: /users
+            .then(function(response) {
+                console.log('OK');
+                console.log(response);
+        } ,
+
+        function errorCallback() {
+                alert("Oops error from");
+                console.log('ERROR ')
+        });
+
+
+        /*
 
         $http({
             method: 'GET',
@@ -86,7 +106,7 @@ angular.module('app.controllers', [])
             // called asynchronously if an error occurs
             // or server returns response with an error status.
             });
-
+        */
     };
 
 
@@ -106,7 +126,7 @@ angular.module('app.controllers', [])
 
       $http({
             method: 'GET',
-            url: '/status'
+            url: '/rtmsg/status'
         }).then(function successCallback(response) {
             console.log('OK');
             console.log(response);
