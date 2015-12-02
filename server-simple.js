@@ -99,7 +99,7 @@ app.get('/sendMessage', function(req, res) {
         var d = new Date();
         console.log('STATS live to : ' + req.query.msg + " " + d.getMilliseconds());
         resp.write('event: popup\n');
-        resp.write('data:' + req.query.msg +   '\n\n'); // Note the extra newline
+        resp.write('data:' + req.query.userName + ':' + req.query.msg +   '\n\n'); // Note the extra newline
   });
 
 });

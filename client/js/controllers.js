@@ -63,12 +63,17 @@ angular.module('app.controllers', [])
         }
 
         console.log('sendMessageAction');
-        var url = '/sendMessage?msg=' + $scope.userData.message;
+        var url = '/sendMessage';
         console.log(url);
 
         $http({
             method: 'GET',
-            url: url
+            url: url,
+            params: {
+                msg: $scope.userData.message,
+                userName: $scope.userData.userName,
+                channelId : $scope.userData.channelId
+            }
         }).then(function successCallback(response) {
             console.log('OK');
             console.log(response);

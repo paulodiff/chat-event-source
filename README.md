@@ -2,16 +2,20 @@
 
 A quick demo of the excellent `EventSource` API for server-sent events, using AngularJS and express.
 
-## Install
 
-```
-cd server
-npm install
-```
+server/
 
-## Run
+	node.js server
 
-```
-node server/server.js
-```
-# angularjs-eventsource-nodejs 
+
+client/
+
+	client IONIC
+	Offline.js test	
+
+START
+
+	nodemon server-simple.js
+
+	http://localhost:9988
+
