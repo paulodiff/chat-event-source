@@ -87,6 +87,33 @@ apiRoutes.get("/status", function(req, res) {
 
 });
 
+
+// sendMessage2Room
+apiRoutes.get('/sendMessage2Room', function(req, res) {
+  console.log('/sendMessage2Room');
+  console.log(req.query.msg);
+
+  // broadcast dei messaggi
+  
+  openConnections.forEach(function(resp) {
+
+        // controllo se sullo stesso channelId
+        console.log('check: ' + resp.channelId + '  =  ' + req.query.channelId);
+        if (resp.channelId == req.query.channelId){
+          console.log('message ' + req.query.msg);
+          resp.write('event: message2room\n');
+          resp.write('data: { "userName":"' + req.query.userName + '", "channelId":"' + req.query.channelId + '", "msg": "' + req.query.msg + '" }\n\n'); // Note the extra newline
+        } else {
+
+        }
+
+  });
+
+  res.send(['ok']);
+
+});
+
+
 // simple route to register the clients
 apiRoutes.get('/sendMessage', function(req, res) {
   console.log('/sendMessage');
@@ -104,6 +131,23 @@ apiRoutes.get('/sendMessage', function(req, res) {
 
 });
  
+// simple req without data
+apiRoutes.get('/query', function(req, res) {
+    console.log('/query');
+    var d = new Date();
+    fakedata = [
+    {
+      "mms" : d.getMilliseconds(),
+      "mms1" : d.getMilliseconds(),
+    },
+    {
+      "mms" : d.getMilliseconds(),
+      "mms1" : d.getMilliseconds(),
+    }
+    ];
+    console.log(fakedata);
+    res.send(fakedata);
+});
 
 // simple route to register the clients
 apiRoutes.get('/eventsource', function(req, res) {

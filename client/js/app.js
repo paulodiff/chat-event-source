@@ -5,11 +5,16 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services', 'app.directives', 'restangular'])
+angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services', 'app.directives', 'restangular', 'app.config'])
+
+
+
 
 // restangular configuration
-.config(function(RestangularProvider) {
-    RestangularProvider.setBaseUrl('/rtmsg');
+.config(function(RestangularProvider, ENV) {
+    RestangularProvider.setBaseUrl(ENV.apiEndpoint + '/rtmsg');
+
+    /*
     RestangularProvider.setExtraFields(['name']);
     RestangularProvider.setResponseExtractor(function(response, operation) {
         return response.data;
@@ -22,16 +27,17 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
 
     RestangularProvider.setDefaultHttpFields({cache: true});
     RestangularProvider.setMethodOverriders(["put", "patch"]);
-
+    */
     // In this case we are mapping the id of each element to the _id field.
     // We also change the Restangular route.
     // The default value for parentResource remains the same.
+    /*
     RestangularProvider.setRestangularFields({
       id: "_id",
       route: "restangularRoute",
       selfLink: "self.href"
     });
-
+    */
     //RestangularProvider.setRequestSuffix('.json');
 
     // Use Request interceptor
@@ -53,6 +59,98 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
       };
     });
     */
+
+    RestangularProvider.addFullRequestInterceptor(function(element, operation, what, url, headers, query) {
+      console.log('addFullRequestInterceptor'); 
+      console.log(element); 
+      console.log(operation); 
+      console.log(what); 
+      console.log(url); 
+      console.log(JSON.stringify(headers)); 
+      console.log(JSON.stringify(query)); 
+    });
+
+    RestangularProvider.setErrorInterceptor(function(response, deferred, responseHandler) {
+
+          switch(response.status) { 
+            
+            case 0: 
+              console.log('Restangular.setErrorInterceptor :' + response.status);
+              console.log(response);
+              return false; // error handled
+            break; //si ferma qui 
+
+            case 403: 
+            case 500: 
+              console.log('Restangular.setErrorInterceptor :' + response.status);
+              console.log(response);
+              return false; // error handled            
+              //istruzioni 
+            break; //si ferma qui 
+
+            default: 
+              console.log('Restangular.setErrorInterceptor : DEFAULT');
+              return true; // error not handled
+
+          }
+
+/*
+
+            if(response.status === 0) {
+              console.log('Restangular.setErrorInterceptor 0');
+                    //$ionicLoading.hide();
+                    //$log.debug('setErrorInterceptor 0');
+                    //$rootScope.$broadcast(ENV.AUTH_EVENTS.serverError);
+                    return false; // error handled
+            }
+
+
+            if(response.status === 403) {
+                console.log('Restangular.setErrorInterceptor 403');
+                    //$ionicLoading.hide();
+                    //$log.debug('setErrorInterceptor 403');
+                    //$rootScope.$broadcast(ENV.AUTH_EVENTS.sessionTimeout);
+                    return false; // error handled
+            }
+
+            if(response.status === 500) {
+              console.log('Restangular.setErrorInterceptor 500');
+                    //$ionicLoading.hide();
+                    //$log.debug('setErrorInterceptor 500');
+                    //$rootScope.$broadcast(ENV.AUTH_EVENTS.serverError);
+                    return false; // error handled
+            }
+
+            if(response.status === 502) {
+              console.log('Restangular.setErrorInterceptor 502');
+                    //$ionicLoading.hide();
+                    //$log.debug('setErrorInterceptor 502');
+                    //$rootScope.$broadcast(ENV.AUTH_EVENTS.serverError);
+                    return false; // error handled
+            }
+
+            if(response.status === 504) {
+              console.log('Restangular.setErrorInterceptor 504');
+                    //$ionicLoading.hide();
+                    //$log.debug('setErrorInterceptor 504');
+                    //$rootScope.$broadcast(ENV.AUTH_EVENTS.serverError);
+                    //return false; // error handled
+            }
+
+            if(response.status === 404) {
+                    $ionicLoading.hide();
+                    $log.debug('setErrorInterceptor 404');
+                    $rootScope.$broadcast(ENV.AUTH_EVENTS.serverError);
+                    return false; // error handled
+            }
+
+*/
+            //return false; // error handled
+            //return true; // error not handled
+        });
+
+
+
 })
 
 .run(function($ionicPlatform) {
@@ -66,5 +164,11 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    // hide loading screen...
+    console.log('hide loading screen...');
+    loading_screen.finish();
+
+
   });
 })

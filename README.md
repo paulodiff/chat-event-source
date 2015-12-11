@@ -11,11 +11,17 @@ server/
 client/
 
 	client IONIC
-	Offline.js test	
+	OFFLINE con RestAngular - http://stackoverflow.com/questions/23851424/how-to-detect-when-online-offline-status-changes
 
 START
 
 	nodemon server-simple.js
 
 	http://localhost:9988
+
+
+ONLINE TEST
+
+	http://plnkr.co/edit/SZ85bfmUlykYVwINstuY?p=catalogue
+
 
