@@ -4,8 +4,11 @@ var cors = require('cors');
 var http = require('http');
 var bodyParser = require('body-parser');
 var os = require('os');
+var fs = require('fs');
 var path = require('path');
 var util = require('util');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
  
 // create the app
 var app = express();
@@ -223,6 +226,57 @@ function createMsg() {
 //  console.log("Express server listening on port " + app.get('port'));
 //})
 
+
+//https://github.com/flowjs/flow.js
+//https://github.com/flowjs/flow.js/tree/master/samples/Node.js
+
+// Configure access control allow origin header stuff
+var ACCESS_CONTROLL_ALLOW_ORIGIN = false;
+process.env.TMPDIR = 'tmp';
+
+var flow = require('./flow-node.js')('tmp');
+
+apiRoutes.post('/upload', multipartMiddleware, function(req, res) {
+  console.log('call $flow.post ...');
+  flow.post(req, function(status, filename, original_filename, identifier) {
+    console.log('POST', status, original_filename, identifier);
+    if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
+      res.header("Access-Control-Allow-Origin", "*");
+    }
+    res.status(status).send();
+  });
+});
+
+apiRoutes.options('/upload', function(req, res){
+  console.log('OPTIONS');
+  if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
+    res.header("Access-Control-Allow-Origin", "*");
+  }
+  res.status(200).send();
+});
+
+// Handle status checks on chunks through Flow.js
+apiRoutes.get('/upload', function(req, res) {
+  flow.get(req, function(status, filename, original_filename, identifier) {
+    console.log('GET', status);
+    if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
+      res.header("Access-Control-Allow-Origin", "*");
+    }
+
+    if (status == 'found') {
+      status = 200;
+    } else {
+      status = 204;
+    }
+
+    res.status(status).send();
+  });
+});
+
+apiRoutes.get('/download/:identifier', function(req, res) {
+  console.log('Get /download/identifier : '+ req.params.identifier);
+  flow.write(req.params.identifier, res);
+});
 
 // apply the routes to our application with the prefix /api
 app.use('/rtmsg', apiRoutes);

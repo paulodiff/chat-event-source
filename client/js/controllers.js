@@ -32,7 +32,6 @@ angular.module('app.controllers', [])
     $scope.currentChannel = '';
     $scope.currentUser = '';
     $scope.currentUserOnChannel = '';
-    
 
 
     $scope.getConnected = function (){
@@ -42,7 +41,6 @@ angular.module('app.controllers', [])
     $scope.connectAction = function(){
 
         console.log(ENV);
-
 
         if(sourceEvent.readyState != 1 ){
 
@@ -118,7 +116,6 @@ angular.module('app.controllers', [])
             console.log('>>> ERROR <<<');
         });
 
-
         /*
 
         $http({
@@ -162,7 +159,6 @@ angular.module('app.controllers', [])
 
 
         /*
-
 
          $http({
             method: 'GET',
