@@ -14,7 +14,7 @@
                 <span class="input-label">Message</span>
                 <input type="text" placeholder="Message2Send" ng-model="userData.message">
                 <button class="button button-positive" ng-click="sendMessage2RoomAction()">
-                    <i class="icon ion-play"></i>
+                <i class="icon ion-play"></i>
                 </button>
             </div>
             <div class="button-bar">
@@ -90,6 +90,16 @@
                     <i class="icon ion-play"></i>
                 </button>
         </div>
+
+        <div class="item item-input item-button-right" name="MessageTXT">
+                <span class="input-label">WebWorker-Message</span>
+                <input type="text" placeholder="Message2Send" ng-model="userData.message">
+                <button class="button button-positive" ng-click="sendMessage2WebWorker()">
+                    <i class="icon ion-play"></i>
+                </button>
+        </div>
+
+
 <!--
         <div class="item">
           <p style="text-align: right">Mario</p>

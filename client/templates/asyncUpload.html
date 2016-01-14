@@ -3,6 +3,9 @@
 
 
 
+
+     <input type="file" multiple custom-on-change="uploadFile">
+
         <form class="list">
 
        <div flow-init="{
@@ -12,7 +15,7 @@
                     query:{upload_token_rr:'my_token'},
                     permanentErrors: [999]
                 }"
-                flow-files-submitted="$flow.upload()"
+                
                 flow-file-success="$file.msg = $message"
                 flow-file-progress="someHandlerMethod( $file, $event, $flow )"
                 flow-file-added="someHandlerMethod( $file, $event, $flow )"
@@ -24,10 +27,15 @@
                 flow-upload-started="someHandlerMethod( $file, $message, $flow )"
                 flow-progress="someHandlerMethod( $file, $message, $flow )"
                 >
+  <!-- flow-files-submitted="$flow.upload()" -->
 
   <input type="file" flow-btn/>
   Input OR Other element as upload button
   <span class="btn" flow-btn>Upload File</span>
+
+  <a class="button button-positive" ng-click="$flow.upload()">UploadALL!!!!</a>
+  <a class="button button-positive" ng-click="uploadViaWorker($flow)">UploadViaWorker</a>
+
 
   <table>
     <tr ng-repeat="file in $flow.files">
@@ -182,6 +190,21 @@
                 <span class="input-label">WebWorker-Message</span>
                 <input type="text" placeholder="Message2Send" ng-model="userData.message">
                 <button class="button button-positive" ng-click="sendMessage2WebWorker()">
+                    <i class="icon ion-play"></i>
+                </button>
+        </div>
+        <div class="item item-input item-button-right" name="MessageTXT">
+                <span class="input-label">WebWorker-STATUS</span>
+                <input type="text" placeholder="Message2Send" ng-model="userData.message">
+                <button class="button button-positive" ng-click="showUploadStatusWorker()">
+                    <i class="icon ion-play"></i>
+                </button>
+        </div>
+
+        <div class="item item-input item-button-right" name="MessageTXT">
+                <span class="input-label">CONFIGURE-WORKER</span>
+                <input type="text" placeholder="Message2Send" ng-model="userData.message">
+                <button class="button button-positive" ng-click="configureWorker()">
                     <i class="icon ion-play"></i>
                 </button>
         </div>

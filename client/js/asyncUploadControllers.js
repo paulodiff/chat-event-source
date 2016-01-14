@@ -15,6 +15,16 @@ angular.module('app.controllers')
 
     HelloWorldService.doWork({'cmd': 'start', 'msg': 'Hi'});
 
+
+    $scope.uploadFile = function(event){
+        var files = event.target.files;
+        console.log(files);
+        HelloWorldService.doWorkF(files);
+
+    };
+
+
+
 /*
     var imageWorker;
     $scope.blurImage = function() {
@@ -103,12 +113,32 @@ function sendMessage(message) {
    }
 
 
+   $scope.uploadViaWorker = function($flow){
+    console.log('uploadViaWorker');
+    console.log($flow.files);
+    HelloWorldService.doWorkF($flow.files);
+   }
+
+   $scope.showUploadStatusWorker = function(){
+    console.log('showUploadStatusWorker');
+    HelloWorldService.doWork({'cmd':'showUploadStatus'});
+   }
+
+    $scope.configureWorker = function(){
+        console.log('configureWorker');
+        HelloWorldService.doWork({'cmd': 'setWorkerOptions', 'msg': {
+                target: window.location.origin + window.location.pathname + 'rtmsg/upload', 
+                //resumeChunkSize: '512',
+                chunkSize: 1*512,
+                simultaneousUploads: 1,
+                permanentErrors: [999],
+                query:{upload_token:'my_token'}
+        }});
+    }
 
     $scope.sendMessage2WebWorker = function(){
-
         console.log('sendMessage2WebWorker');
-        HelloWorldService.doWork({'cmd': 'time', 'msg': 'test!!!!'});
-
+        HelloWorldService.doWork({'cmd': 'time', 'msg': { 'val1' : 100, 'val2' : 300 }});
     }
 
 

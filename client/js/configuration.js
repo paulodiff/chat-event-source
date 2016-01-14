@@ -3,6 +3,7 @@ angular.module('app.config', [])
 .constant('ENV', {
 					name:'development',
 					apiEndpoint:'http://localhost:9988',
+					rootUrl: window.location.origin + window.location.pathname,
 					apiLogin:'/authenticate',
 					apiLogout:'/logout',
 					routeAfterLogon:'menu.listProtocolli',

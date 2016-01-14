@@ -17,10 +17,9 @@ angular.module('app', ['ionic',
 
 
 
-
 // restangular configuration
 .config(function(RestangularProvider, ENV) {
-    RestangularProvider.setBaseUrl(ENV.apiEndpoint + '/rtmsg');
+    RestangularProvider.setBaseUrl(ENV.rootUrl + 'rtmsg');
 
     /*
     RestangularProvider.setExtraFields(['name']);

@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
   
-.controller('eventSourceCtrl', function($scope, $http, Restangular, ENV) {
+.controller('eventSourceCtrl', function($scope, $http, Restangular, ENV, HelloWorldService) {
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -33,6 +33,12 @@ angular.module('app.controllers', [])
     $scope.currentUser = '';
     $scope.currentUserOnChannel = '';
 
+    $scope.sendMessage2WebWorker = function(){
+
+        console.log('sendMessage2WebWorker');
+        HelloWorldService.doWork({'cmd': 'getWorkerTime', 'msg': 'test!!!!'});
+
+    }
 
     $scope.getConnected = function (){
         return sourceEvent.readyState == 1;
@@ -247,6 +253,9 @@ angular.module('app.controllers', [])
             $scope.userData.sourceMsg = msg.data;
         });
     } 
+
+
+
 
 
 })
