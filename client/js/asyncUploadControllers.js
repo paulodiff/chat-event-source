@@ -5,24 +5,29 @@
 //angular.module('myApp.controllers', [])
 angular.module('app.controllers')
 
-
-
-.controller('asyncUploadCtrl', ['$scope', '$timeout', '$log', 'ENV' , 'HelloWorldService',
-                       function ($scope,   $timeout,   $log,   ENV,    HelloWorldService) {
+.controller('asyncUploadCtrl', ['$scope', '$timeout', '$log', 'ENV' , 'HelloWorldService','$ionicPopup',
+                       function ($scope,   $timeout,   $log,   ENV,    HelloWorldService,  $ionicPopup) {
     
-
     $log.debug("asyncUploadController ... start");
 
-    HelloWorldService.doWork({'cmd': 'start', 'msg': 'Hi'});
-
+    //HelloWorldService.doWork({'cmd': 'start', 'msg': 'Hi'});
 
     $scope.uploadFile = function(event){
+        console.log('uploadFile....');
         var files = event.target.files;
         console.log(files);
         HelloWorldService.doWorkF(files);
 
     };
 
+    $scope.uploadErrorFile = false;
+    $scope.userData = {};
+    $scope.userData.fileName = "x";
+    $scope.userData.fileSize = "xxx";
+    $scope.userData.fileChunkNumber = "xxx";
+    $scope.userData.workerInfo = "xxx";
+
+    $scope.userData.log = "start....";
 
 
 /*
@@ -81,6 +86,62 @@ angular.module('app.controllers')
     };
         */
 
+
+// legge i messaggi dal worker
+$scope.$on('msgFromWorker', function(event, args) {
+    // .. Do whatever you need to do.
+    console.log('msgFromWorker ... : ');
+    console.log(args);
+
+    if (args.msgType == "error"){
+
+       var alertPopup = $ionicPopup.alert({
+         title: args.msgType,
+         template: args.msgData + '<br/>' + args.msgText + '<br/>' + args.msgTime
+       });
+
+    }
+
+    if (args.msgType == "fileSuccessUpload"){
+
+       var alertPopup = $ionicPopup.alert({
+         title: args.msgType,
+         template: args.msgData + '<br/>' + args.msgText + '<br/>' + args.msgTime
+       });
+
+    }
+
+
+    if (args.msgType == "uploadChunk"){
+        $scope.userData.fileName = args.msgData.fileName;
+        $scope.userData.fileSize = args.msgData.fileSize;
+        $scope.userData.progress = args.msgData.progress;
+        $scope.userData.fileChunkNumber = args.msgTime + '#' + args.msgData.loaded + '#' + args.msgData.offset + '#' + args.msgData.total;
+        $scope.$apply();
+    }
+
+    if (args.msgType == "showUploadStatus"){
+        $scope.userData.workerInfo = args.msgTime + '#' + args.msgData.getSize + '#' + args.msgData.sizeUploaded + '#' + args.msgData.progress;
+        $scope.$apply();
+    }
+
+    if ((args.msgType == "showMessage") ||  (args.msgType == "stopUpload") || (args.msgType == "resumeUpload")){
+        $scope.userData.workerInfo = args.msgTime + '#' + args.msgText;
+        $scope.$apply();
+    }
+
+    if (args.msgType == "fileErrorUpload") {
+        $scope.uploadErrorFile = true;
+        $scope.$apply();   
+    }
+
+
+
+
+    //$scope.userData.log = $scope.userData.log + args.message;
+});
+
+
 function sendMessage(message) {
   // This wraps the message posting/response in a promise, which will resolve if the response doesn't
   // contain an error, and reject with the error if it does. If you'd prefer, it's possible to call
@@ -104,6 +165,12 @@ function sendMessage(message) {
       [messageChannel.port2]);
   });
 }
+
+
+    $scope.openSelectFile = function(){
+        console.log('openSelectFile............');
+        document.getElementById("upfile").click();
+    }
 
    $scope.someHandlerMethod = function( $file, $message, $flow ){
     console.log('someHandlerMethod');
@@ -129,18 +196,30 @@ function sendMessage(message) {
         HelloWorldService.doWork({'cmd': 'setWorkerOptions', 'msg': {
                 target: window.location.origin + window.location.pathname + 'rtmsg/upload', 
                 //resumeChunkSize: '512',
-                chunkSize: 1*512,
+                chunkSize: 1*1024*100,
+                //chunkSize: 1*1024,
+                //forceChunkSize: true,
                 simultaneousUploads: 1,
                 permanentErrors: [999],
                 query:{upload_token:'my_token'}
         }});
     }
 
-    $scope.sendMessage2WebWorker = function(){
-        console.log('sendMessage2WebWorker');
-        HelloWorldService.doWork({'cmd': 'time', 'msg': { 'val1' : 100, 'val2' : 300 }});
+    $scope.resumeUploadWorker = function(){
+        console.log('resumeUploadWorker');
+        HelloWorldService.doWork({'cmd': 'resumeUpload', 'msg': { 'val1' : 100, 'val2' : 300 }});
     }
 
+    $scope.stopUploadWorker = function(){
+        console.log('stopUploadWorker');
+        HelloWorldService.doWork({'cmd': 'stopUpload', 'msg': { 'val1' : 100, 'val2' : 300 }});
+    }
+
+    $scope.retryUploadWorker = function(){
+        console.log('retryUploadWorker');
+        $scope.uploadErrorFile = false;
+        HelloWorldService.doWork({'cmd': 'retryUpload', 'msg': { 'val1' : 100, 'val2' : 300 }});
+    }
 
     $scope.uploadFiles = function(files, errFiles) {
             $scope.files = files;

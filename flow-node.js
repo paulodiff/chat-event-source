@@ -34,29 +34,32 @@ module.exports = flow = function(temporaryFolder) {
 
         // Check if the request is sane
         if (chunkNumber == 0 || chunkSize == 0 || totalSize == 0 || identifier.length == 0 || filename.length == 0) {
+            console.log('non_flow_request');
             return 'non_flow_request';
         }
         var numberOfChunks = Math.max(Math.floor(totalSize / (chunkSize * 1.0)), 1);
         if (chunkNumber > numberOfChunks) {
-            return 'invalid_flow_request1: chunkNumber > numberOfChunks' + chunkNumber + "-" + numberOfChunks ;
+            console.log('invalid_flow_request1: chunkNumber > numberOfChunks' + chunkNumber + "-" + numberOfChunks);
+            return 'invalid_flow_request1';
         }
 
         // Is the file too big?
         if ($.maxFileSize && totalSize > $.maxFileSize) {
-            return 'invalid_flow_request2: file too big';
+            console.log('invalid_flow_request2: file too big');
+            return 'invalid_flow_request2';
         }
 
         if (typeof(fileSize) != 'undefined') {
             if (chunkNumber < numberOfChunks && fileSize != chunkSize) {
-                // The chunk in the POST request isn't the correct size
+                console.log('The chunk in the POST request isnt the correct size');
                 return 'invalid_flow_request3';
             }
             if (numberOfChunks > 1 && chunkNumber == numberOfChunks && fileSize != ((totalSize % chunkSize) + parseInt(chunkSize))) {
-                // The chunks in the POST is the last one, and the fil is not the correct size
+                console.log('The chunks in the POST is the last one, and the fil is not the correct size');
                 return 'invalid_flow_request4';
             }
             if (numberOfChunks == 1 && fileSize != totalSize) {
-                // The file is only a single chunk, and the data size does not fit
+                console.log('The file is only a single chunk, and the data size does not fit');
                 return 'invalid_flow_request5';
             }
         }
@@ -95,13 +98,6 @@ module.exports = flow = function(temporaryFolder) {
     //'non_flow_request', null, null, null
     $.post = function(req, callback) {
 
-        
-        var time = 10;
-        console.log('$flow.post1:wait...:' + time);
-        var stop = new Date().getTime();
-        while(new Date().getTime() < stop + time) {
-            ;
-        }
 
         console.log('$flow.post1:go!');
 

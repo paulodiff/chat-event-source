@@ -9,7 +9,7 @@ angular.module('app.services', [])
 
 }])
 
-.factory('HelloWorldService',['$q','ENV',function($q, ENV){
+.factory('HelloWorldService',['$q','ENV','$rootScope',function($q, ENV,$rootScope){
 
 
     var workerUrl = ENV.rootUrl + 'js/doWork.js';
@@ -18,7 +18,9 @@ angular.module('app.services', [])
     var defer;
 
     worker.addEventListener('message', function(e) {
-      console.log('Worker said: ', e.data);
+      console.log('Worker said: ... ');
+      console.log(e.data);
+      $rootScope.$broadcast('msgFromWorker', e.data);
       defer.resolve(e.data);
     }, false);
 
@@ -52,7 +54,7 @@ angular.module('app.services', [])
 
         doWorkF : function(myData){
         	console.log('call doWorkF...');
-            
+           
  			var objData =
 			{
 				cmd: 'addFileList',

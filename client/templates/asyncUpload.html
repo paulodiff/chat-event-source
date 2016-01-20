@@ -1,109 +1,108 @@
+<style>
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    /* margin: 10px; */
+}
+.fileUpload1 input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    cursor: pointer;
+ }
+
+</style>
+
+
 <ion-view title="Service Worker Upload">
     <ion-content padding="true" class="has-header">
 
 
-
-
-     <input type="file" multiple custom-on-change="uploadFile">
-
-        <form class="list">
-
-       <div flow-init="{
-                    target: '/rtmsg/upload',
-                    chunkSize: 1*512,
-                    simultaneousUploads: 1,
-                    query:{upload_token_rr:'my_token'},
-                    permanentErrors: [999]
-                }"
-                
-                flow-file-success="$file.msg = $message"
-                flow-file-progress="someHandlerMethod( $file, $event, $flow )"
-                flow-file-added="someHandlerMethod( $file, $event, $flow )"
-                flow-files-added="someHandlerMethod( $files, $event, $flow )"
-                flow-file-retry="someHandlerMethod( $file, $event, $flow )"
-                flow-file-error="someHandlerMethod( $file, $message, $flow )"
-                flow-error="someHandlerMethod( $file, $message, $flow )"
-                flow-complete="someHandlerMethod( $file, $message, $flow )"
-                flow-upload-started="someHandlerMethod( $file, $message, $flow )"
-                flow-progress="someHandlerMethod( $file, $message, $flow )"
-                >
-  <!-- flow-files-submitted="$flow.upload()" -->
-
-  <input type="file" flow-btn/>
-  Input OR Other element as upload button
-  <span class="btn" flow-btn>Upload File</span>
-
-  <a class="button button-positive" ng-click="$flow.upload()">UploadALL!!!!</a>
-  <a class="button button-positive" ng-click="uploadViaWorker($flow)">UploadViaWorker</a>
-
-
-  <table>
-    <tr ng-repeat="file in $flow.files">
-        <td>{{$index+1}}</td>
-        <td>{{file.name}}</td>
-        <td>{{file.msg}}</td>
-    </tr>
-  </table>
-
-
-<p>
-    <a class="btn btn-small btn-success" ng-click="$flow.resume()">Upload</a>
-    <a class="btn btn-small btn-danger" ng-click="$flow.pause()">Pause</a>
-    <a class="btn btn-small btn-info" ng-click="$flow.cancel()">Cancel</a>
-    <span class="label label-info">Size: {{$flow.getSize()}}</span>
-    <span class="label label-info">Is Uploading: {{$flow.isUploading()}}</span>
-  </p>
-
-<table class="table table-hover table-bordered table-striped" flow-transfers>
-    <thead>
-    <tr>
-      <th>#</th>
-      <th>Name</th>
-      <th>Size</th>
-      <th>Relative Path</th>
-      <th>Unique Identifier</th>
-      <th>#Chunks</th>
-      <th>Progress</th>
-      <th>Paused</th>
-      <th>Uploading</th>
-      <th>Completed</th>
-      <th>Settings</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="file in transfers">
-      <td>{{$index+1}}</td>
-      <td>{{file.name}}</td>
-      <td>{{file.size}}</td>
-      <td>{{file.relativePath}}</td>
-      <td>{{file.uniqueIdentifier}}</td>
-      <td>{{file.chunks.length}}</td>
-      <td>{{file.progress()}}</td>
-      <td>{{file.paused}}</td>
-      <td>{{file.isUploading()}}</td>
-      <td>{{file.isComplete()}}</td>
-      <td>
-        <div class="btn-group">
-          <a class="button button-balanced" ng-click="file.pause()" ng-hide="file.paused">
-            Pause
-          </a>
-          <a class="button button-assertive" ng-click="file.resume()" ng-show="file.paused">
-            Resume
-          </a>
-          <a class="button " ng-click="file.cancel()">
-            Cancel
-          </a>
-          <a class="button button-positive" ng-click="file.retry()" ng-show="file.error">
-            Retry
-          </a>
+      <div class="row">
+        <div class="col-50">
+            <button class="button button-positive button-block" ng-click="configureWorker()">Configure Wk</button>
         </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
 
-</div>
+        <div class="col-50">
+            <button class="button button-assertive button-block" ng-click="showUploadStatusWorker()">Status Wk</button>
+        </div>
+      </div>
+
+     
+      <div class="row">
+        <div class="col">
+          <div class="fileUpload bar bar-positive">
+              <input id="upfile" type="file" class="upload" multiple custom-on-change="uploadFile" />
+          </div>
+        </div>
+      </div>
+
+    <form class="list">
+
+      <div class="row card">
+            <div class="col-50">
+                 FileName:{{userData.fileName}}
+            </div>
+            <div class="col-50">
+                FileSize:{{userData.fileSize}}
+            </div>
+        </div>
+       <div class="row card">
+            <div class="col-50">
+                ChunkInfo:{{userData.fileChunkNumber}}
+            </div>
+            <div class="col-50">
+                Progress:{{userData.progress}}
+            </div>
+        </div>
+
+        <progress value="{{userData.progress}}" max="1"></progress>
+
+       <div class="row">
+            <div class="col-33">
+                 WorkerInfo:
+            </div>
+            <div class="col-66">
+                {{userData.workerInfo}}
+            </div>
+        </div>
+
+        <div class="row" ng-show="uploadErrorFile">
+        <div class="col">
+            <button class="button button-balanced button-block" 
+
+                    ng-click="retryUploadWorker()">Retry Upload</button>
+        </div>
+        </div>
+
+
+        <div class="row">
+        <div class="col-50">
+            <button class="button button-royal button-block" ng-click="resumeUploadWorker()">Resume Upload</button>
+        </div>
+        <div class="col-50">
+            <button class="button button-assertive button-block" ng-click="stopUploadWorker()">Stop Upload</button>
+        </div>
+        </div>
+        
       
+<!--
             <label class="item item-input" name="UserName">
                 <span class="input-label">Name</span>
                 <input type="text" placeholder="UserName" ng-model="userData.userName">
@@ -124,7 +123,6 @@
                 <button class="button button-balanced button-block  icon ion-play" ng-click="connectAction()"></button>
                 <button class="button button-assertive button-block  icon ion-stop" ng-click="disconnectAction()"></button>
                 <button class="button button-positive button-block  icon ion-stats-bars" ng-click="statsAction()"></button>
-<!--
 
                 <button class="button button-calm button-block  icon ion-share" ng-click="sendMessageAction()"></button>
                 <button class="button button-calm button-block  icon ion-share" ng-click="fakeAction()"></button>
@@ -175,10 +173,14 @@
             <label class="item item-input">
                 <span class="input-label">text</span><textarea placeholder="">{{userData.sourceMsg}}</textarea>
             </label>
+
+    function getFile(){
+        document.getElementById("upfile").click();
+    }
+
 -->
 
         </form>
-
 
         <div class="list card">
           <a class="item" ng-repeat="item in chatData">
@@ -186,6 +188,7 @@
             <p  ng-style="item.userName != userData.userName && {'text-align': 'right'}" >{{item.msg}}</p>
           </a>              
         </div>
+        
         <div class="item item-input item-button-right" name="MessageTXT">
                 <span class="input-label">WebWorker-Message</span>
                 <input type="text" placeholder="Message2Send" ng-model="userData.message">
@@ -193,6 +196,7 @@
                     <i class="icon ion-play"></i>
                 </button>
         </div>
+
         <div class="item item-input item-button-right" name="MessageTXT">
                 <span class="input-label">WebWorker-STATUS</span>
                 <input type="text" placeholder="Message2Send" ng-model="userData.message">
@@ -208,6 +212,30 @@
                     <i class="icon ion-play"></i>
                 </button>
         </div>
+
+        <textarea  ng-model="userData.log"> </textarea>
+
+        <input type="textarea" placeholder="Message2Send" ng-model="userData.message">
+
+        <div class="row">
+            <div class="col">
+                <button class="button button-block button-positive"
+                        ng-click="openSelectFile()">OpenFileDialog</button>
+            </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-50">
+            <button class="button button-block button-positive">Button</button>
+          </div>
+          <div class="col-25 col-offset-10">
+            <button class="button button-block">Button</button>
+          </div>
+        </div>
+
+
+
 <!--
         <div class="item">
           <p style="text-align: right">Mario</p>

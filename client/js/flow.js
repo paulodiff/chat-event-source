@@ -858,6 +858,7 @@
      * @function
      */
     resume: function() {
+      console.log('flow.js-resume');
       this.paused = false;
       this.flowObj.upload();
     },
@@ -894,6 +895,7 @@
      * @function
      */
     retry: function () {
+      console.log('flow.js-retry');
       this.bootstrap();
       this.flowObj.upload();
     },

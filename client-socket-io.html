@@ -1,0 +1,36 @@
+<html>
+    <head>
+   
+        <title>**Push Socket IO**</title>
+        <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
+        <script src="https://code.jquery.com/jquery-1.7.1.js"></script>
+    </head>
+    <body>
+        <time></time>
+        <div id="container">1.Try to change your xml data to update this content</div>
+        <div id="log">log</div>
+    </body>
+
+    <script>
+    // creating a new websocket
+    var url_connect = 'http://localhost:9988';
+    var url_origin = window.location.origin;
+    var url_path = window.location.pathname + 'socket.io';
+    //url_2 = url_2.replace(/\/$/, '');
+    console.log(url_origin);
+    console.log(url_path);
+
+    $('#log').html(url_path + ":" + url_path);
+    $('time').html('Last Update:' + new Date());
+
+    var socket = io(url_origin, {path: url_path});
+    // on every message recived we print the new datas inside the #container div
+    socket.on('notification', function (data) {
+        // convert the json string into a valid javascript object
+        //var _data = JSON.parse(data);
+
+        $('#container').html('<h1>FromServer:' + data + '</h1>');
+        $('time').html('<h1>' +'Last Update:' + new Date() + '</h1>');
+    });
+    </script>
+</html>

@@ -28,7 +28,6 @@ app.use(require("morgan")("short"));
 //app.use(express.static(__dirname + "./client"));
 console.log(path.join(__dirname, './client'));
 app.use(express.static(path.join(__dirname, './client')));
-
  
 // simple standard errorhandler
 //app.configure('development', function(){
@@ -40,6 +39,12 @@ var openConnections = [];
 // get an instance of the router for api routes
 var apiRoutes = express.Router(); 
  
+apiRoutes.post("/status", function(req, res) {
+  console.log('POST:/status');
+  res.status(241).send();
+});
+
+
 apiRoutes.get("/status", function(req, res) {
   console.log("GET /status ...");
   //console.log(util.inspect(openConnections));
@@ -233,16 +238,47 @@ function createMsg() {
 // Configure access control allow origin header stuff
 var ACCESS_CONTROLL_ALLOW_ORIGIN = false;
 process.env.TMPDIR = 'tmp';
+var DW_PATH = (path.join(__dirname, './download'));
+console.log('DW_PATH',DW_PATH);
+
 
 var flow = require('./flow-node.js')('tmp');
 
 apiRoutes.post('/upload', multipartMiddleware, function(req, res) {
-  console.log('call $flow.post ...');
+  console.log('/upload call $flow.post ...');
   flow.post(req, function(status, filename, original_filename, identifier) {
-    console.log('POST', status, original_filename, identifier);
+    console.log('callback POST', status, original_filename, identifier);
+    console.log('status', status);
+    console.log('original_filename', original_filename);
+    console.log('identifier', identifier);
+
     if (ACCESS_CONTROLL_ALLOW_ORIGIN) {
       res.header("Access-Control-Allow-Origin", "*");
     }
+
+    if (status == 'partly_done') {
+      status = 200;
+    }
+
+    if (status == 'done') {
+
+      var dw_fileName = DW_PATH + "/" + original_filename;
+      console.log('writing ...',dw_fileName);
+      var stream = fs.createWriteStream(dw_fileName);
+      flow.write(identifier, stream);
+      //stream.on('data', function(data){...});
+      //stream.on('finish', function(){...});
+      
+      status = 200;
+    }
+
+    if (status == 'invalid_flow_request')  {   status = 501;  } 
+    if (status == 'non_flow_request')      {   status = 501;  } 
+    if (status == 'invalid_flow_request1') {   status = 501;  } 
+    if (status == 'invalid_flow_request2') {   status = 502;  } 
+    if (status == 'invalid_flow_request3') {   status = 503;  } 
+    if (status == 'invalid_flow_request4') {   status = 504;  } 
+
     res.status(status).send();
   });
 });
@@ -282,5 +318,5 @@ apiRoutes.get('/download/:identifier', function(req, res) {
 app.use('/rtmsg', apiRoutes);
 
 app.listen(PORT, function() {
-           console.log("listening on %d", PORT);
-         });
+  console.log("listening on %d", PORT);
+});
