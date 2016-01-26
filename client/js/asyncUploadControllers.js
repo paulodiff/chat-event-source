@@ -12,20 +12,17 @@ angular.module('app.controllers')
 
     //HelloWorldService.doWork({'cmd': 'start', 'msg': 'Hi'});
 
-    $scope.uploadFile = function(event){
-        console.log('uploadFile....');
-        var files = event.target.files;
-        console.log(files);
-        HelloWorldService.doWorkF(files);
-
-    };
 
     $scope.uploadErrorFile = false;
+    
     $scope.userData = {};
     $scope.userData.fileName = "x";
     $scope.userData.fileSize = "xxx";
     $scope.userData.fileChunkNumber = "xxx";
     $scope.userData.workerInfo = "xxx";
+    $scope.userData.Files = [];
+
+    console.log($scope.userData.Files);
 
     $scope.userData.log = "start....";
 
@@ -113,6 +110,9 @@ $scope.$on('msgFromWorker', function(event, args) {
 
 
     if (args.msgType == "uploadChunk"){
+
+
+
         $scope.userData.fileName = args.msgData.fileName;
         $scope.userData.fileSize = args.msgData.fileSize;
         $scope.userData.progress = args.msgData.progress;
@@ -166,6 +166,12 @@ function sendMessage(message) {
   });
 }
 
+    $scope.uploadFile = function(event){
+        console.log('uploadFile....');
+        var files = event.target.files;
+        console.log(files);
+        HelloWorldService.doWorkF(files);
+    };
 
     $scope.openSelectFile = function(){
         console.log('openSelectFile............');
@@ -203,7 +209,16 @@ function sendMessage(message) {
                 permanentErrors: [999],
                 query:{upload_token:'my_token'}
         }});
+
+
     }
+
+    $scope.startUploadWorker = function(){
+        // Start Upload
+        console.log('startUploadWorker: startUpload');
+        HelloWorldService.doWork({'cmd':'startUpload'});
+    }
+
 
     $scope.resumeUploadWorker = function(){
         console.log('resumeUploadWorker');
@@ -221,10 +236,44 @@ function sendMessage(message) {
         HelloWorldService.doWork({'cmd': 'retryUpload', 'msg': { 'val1' : 100, 'val2' : 300 }});
     }
 
+
+    $scope.addFiles = function(files, errFiles) {
+            console.log('addFiles ...');
+            var files = event.target.files;
+            console.log(files);
+            
+            var fileInfo = [];
+            var i = 0;
+            for(i=0;i<files.length;i++){
+              console.log('adding file ..', files[i].name);
+              fileInfo[i]  = {
+                  'name' : files[i].name,
+                  'error' : '',
+                  'paused' : '',
+                  'type' : files[i].type,
+                  'size' : files[i].size,
+                  'uniqueIdentifier' : '',
+                  '_prevProgress' : ''
+                }
+            }
+
+
+            $scope.userData.Files = fileInfo;
+            $scope.$apply();
+            HelloWorldService.doWorkF(files);
+
+            console.log($scope.fFiles);
+            console.log($scope.userData.Files);
+
+    }
+
+
+
+    // associata a input
     $scope.uploadFiles = function(files, errFiles) {
+            $log.debug("asyncUploadController ... uploadFiles ....");
             $scope.files = files;
             $scope.errFiles = errFiles;
-            $log.debug("asyncUploadController ... uploading ....");
             /*
             angular.forEach(files, function(file) {
                 file.upload = Upload.upload({
@@ -269,6 +318,21 @@ function sendMessage(message) {
                 });
             })
     }
+
+
+    // init worker
+    console.log('INIT worker');
+    HelloWorldService.doWork({'cmd': 'setWorkerOptions', 'msg': {
+                target: window.location.origin + window.location.pathname + 'rtmsg/upload', 
+                //resumeChunkSize: '512',
+                chunkSize: 1*1024*100,
+                //chunkSize: 1*1024,
+                //forceChunkSize: true,
+                simultaneousUploads: 1,
+                permanentErrors: [999],
+                query:{upload_token:'my_token'}
+    }});
+
 }])
 
 

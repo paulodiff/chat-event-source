@@ -86,7 +86,6 @@ self.addEventListener('message', function(e) {
         console.log('fileProgress');
         console.log(file, chunk);
 
-
       self.postMessage({ 
           'msgType' : 'uploadChunk', 
           'msgTime' : new Date().getTime(),
@@ -102,11 +101,8 @@ self.addEventListener('message', function(e) {
   
       });
 
-
-
       workerConfigured = true;
       console.log("workerConfigured:", workerConfigured);
-
 
         self.postMessage({ 
           'msgType' : 'showMessage', 
@@ -131,9 +127,8 @@ self.addEventListener('message', function(e) {
       break;      
     
     case 'addFileList':
-      console.log("workerConfigured:", workerConfigured);
 
-      if(workerConfigured){
+        console.log("addFileList:", workerConfigured);    
 
         for(i=0;i<data.files.length;i++){
           console.log('adding file ..', data.files[i]);
@@ -141,12 +136,12 @@ self.addEventListener('message', function(e) {
         }
 
 
-        flow.upload();
-        self.postMessage('WW:addFileList: ' + new Date().getTime());
-      } else {
-        self.postMessage('WW:addFileList: WORKER NOT CONFIGURED!');
-      }
       break;      
+
+    case 'startUpload':
+        console.log("startUpload:", workerConfigured);    
+        flow.upload();
+    break;
     
     case 'showUploadStatus':
 

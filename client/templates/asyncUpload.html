@@ -27,37 +27,44 @@
     cursor: pointer;
  }
 
+ progress[value] {
+  width: 250px;
+  height: 20px;
+  background-color: #eee;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
 </style>
 
 
 <ion-view title="Service Worker Upload">
     <ion-content padding="true" class="has-header">
 
-
-      <div class="row">
-        <div class="col-50">
-            <button class="button button-positive button-block" ng-click="configureWorker()">Configure Wk</button>
+       <div class="row">
+            <div class="col">
+                <button class="button button-block button-positive"
+                        ng-click="openSelectFile()">Selezione i file..</button>
+            </div>
         </div>
 
-        <div class="col-50">
-            <button class="button button-assertive button-block" ng-click="showUploadStatusWorker()">Status Wk</button>
-        </div>
-      </div>
 
-     
-      <div class="row">
-        <div class="col">
-          <div class="fileUpload bar bar-positive">
-              <input id="upfile" type="file" class="upload" multiple custom-on-change="uploadFile" />
-          </div>
-        </div>
-      </div>
+              <input id="upfile" type="file" ng-hide="true" class="upload" multiple custom-on-change="addFiles" />
+
+<div class="list">
+  <div class="item item-button-right" ng-repeat="fItem in userData.Files">
+    {{fItem.name}}
+    <button class="button button-positive">
+      <i class="icon ion-ios-telephone"></i>
+    </button>
+  </div>
+</div>
 
     <form class="list">
 
       <div class="row card">
             <div class="col-50">
-                 FileName:{{userData.fileName}}
+                 CurrFileName:{{userData.fileName}}
             </div>
             <div class="col-50">
                 FileSize:{{userData.fileSize}}
@@ -91,6 +98,15 @@
         </div>
         </div>
 
+      <div class="row">
+        <div class="col-50">
+            <button class="button button-positive button-block" ng-click="startUploadWorker()">Start UPLOAD!</button>
+        </div>
+
+        <div class="col-50">
+            <button class="button button-assertive button-block" ng-click="showUploadStatusWorker()">Status Wk</button>
+        </div>
+      </div>
 
         <div class="row">
         <div class="col-50">
@@ -182,12 +198,7 @@
 
         </form>
 
-        <div class="list card">
-          <a class="item" ng-repeat="item in chatData">
-            <h2 ng-style="item.userName != userData.userName && {'text-align': 'right'}">{{item.userName}}</h2>
-            <p  ng-style="item.userName != userData.userName && {'text-align': 'right'}" >{{item.msg}}</p>
-          </a>              
-        </div>
+<!--
         
         <div class="item item-input item-button-right" name="MessageTXT">
                 <span class="input-label">WebWorker-Message</span>
@@ -213,28 +224,7 @@
                 </button>
         </div>
 
-        <textarea  ng-model="userData.log"> </textarea>
-
-        <input type="textarea" placeholder="Message2Send" ng-model="userData.message">
-
-        <div class="row">
-            <div class="col">
-                <button class="button button-block button-positive"
-                        ng-click="openSelectFile()">OpenFileDialog</button>
-            </div>
-        </div>
-
-
-        <div class="row">
-          <div class="col-50">
-            <button class="button button-block button-positive">Button</button>
-          </div>
-          <div class="col-25 col-offset-10">
-            <button class="button button-block">Button</button>
-          </div>
-        </div>
-
-
+-->
 
 <!--
         <div class="item">
