@@ -52,11 +52,16 @@
               <input id="upfile" type="file" ng-hide="true" class="upload" multiple custom-on-change="addFiles" />
 
 <div class="list">
-  <div class="item item-button-right" ng-repeat="fItem in userData.Files">
-    {{fItem.name}}
-    <button class="button button-positive">
-      <i class="icon ion-ios-telephone"></i>
-    </button>
+  <div class="item" ng-repeat="fItem in userData.Files">
+    {{fItem.name}}</br>{{fItem.size}}kb
+    <progress value="{{fItem._prevProgress}}" max="1"></progress>
+
+    <!--
+    <span class="item-note" style="color:green;">
+      {{fItem._prevProgress}}
+    </span>
+    -->
+
   </div>
 </div>
 

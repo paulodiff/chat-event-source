@@ -33,8 +33,11 @@ self.addEventListener('message', function(e) {
 
       
       flow.on('fileAdded', function(file, event){
-        console.log('fileAdded');
+        console.log('on fileAdded : ',flow.files.length);
         console.log(file, event);
+
+
+        
       });
 
       flow.on('fileRetry', function(file, event){
@@ -86,20 +89,43 @@ self.addEventListener('message', function(e) {
         console.log('fileProgress');
         console.log(file, chunk);
 
-      self.postMessage({ 
+
+     var fileInfo = [];
+      var i = 0;
+      for(i=0;i<flow.files.length;i++){
+          console.log('fileAdded : adding file ..', flow.files[i].name);
+          fileInfo[i]  = {
+              'name' : flow.files[i].name,
+              'error' : flow.files[i].error,
+              'paused' : flow.files[i].paused,
+              'size' : flow.files[i].size,
+              'uniqueIdentifier' : flow.files[i].uniqueIdentifier,
+              '_prevProgress' : flow.files[i]._prevProgress
+            }
+        }
+
+        console.log(fileInfo);
+        console.log('sizeUploaded',flow.sizeUploaded());
+        console.log('progress',flow.progress());
+        console.log('timeRemaining',flow.timeRemaining());
+
+        self.postMessage({ 
           'msgType' : 'uploadChunk', 
           'msgTime' : new Date().getTime(),
           'msgData' : {
-             'fileName' : file.name,
-             'fileSize' : file.size,
-             'loaded'   : chunk.loaded, 
-             'offset'   : chunk.offset,
-             'total'    : chunk.total,
-             'progress' : flow.progress()
+             'getSize': flow.getSize(), 
+             'sizeUploaded' : flow.sizeUploaded(),
+             'progress' : flow.progress(),
+             'timeRemaining' : flow.timeRemaining(),
+             'files' : fileInfo
           }, 
-          'msgText' : 'Worker upload status'});
+          'msgText' : 'Worker upload status'
+        });
+
+
+
   
-      });
+      }); //OnfileProgress
 
       workerConfigured = true;
       console.log("workerConfigured:", workerConfigured);
@@ -135,6 +161,37 @@ self.addEventListener('message', function(e) {
           flow.addFile(data.files[i]);
         }
 
+        console.log('addFileList : ',flow.files.length);
+
+
+    // return a list of fileInfo
+      var fileInfo = [];
+      var i = 0;
+      for(i=0;i<flow.files.length;i++){
+          console.log('fileAdded : adding file ..', flow.files[i].name);
+          fileInfo[i]  = {
+              'name' : flow.files[i].name,
+              'error' : flow.files[i].error,
+              'paused' : flow.files[i].paused,
+              'size' : flow.files[i].size,
+              'uniqueIdentifier' : flow.files[i].uniqueIdentifier,
+              '_prevProgress' : flow.files[i]._prevProgress
+            }
+        }
+
+        console.log(fileInfo);
+
+        self.postMessage({ 
+          'msgType' : 'showUploadStatus', 
+          'msgTime' : new Date().getTime(),
+          'msgData' : {
+             'getSize': flow.getSize(), 
+             'sizeUploaded' : flow.sizeUploaded(),
+             'progress' : flow.progress(),
+             'timeRemaining' : flow.timeRemaining(),
+             'files' : fileInfo
+          }, 
+          'msgText' : 'Worker upload status'});
 
       break;      
 
@@ -169,7 +226,7 @@ self.addEventListener('message', function(e) {
               'uniqueIdentifier' : flow.files[i].uniqueIdentifier,
               '_prevProgress' : flow.files[i]._prevProgress
             }
-          flow.addFile(flow.files[i]);
+          //flow.addFile(flow.files[i]);
         }
 
         console.log(fileInfo);

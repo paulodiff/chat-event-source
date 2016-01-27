@@ -113,15 +113,17 @@ $scope.$on('msgFromWorker', function(event, args) {
 
 
 
-        $scope.userData.fileName = args.msgData.fileName;
-        $scope.userData.fileSize = args.msgData.fileSize;
+        //$scope.userData.fileName = args.msgData.fileName;
+        //$scope.userData.fileSize = args.msgData.fileSize;
         $scope.userData.progress = args.msgData.progress;
-        $scope.userData.fileChunkNumber = args.msgTime + '#' + args.msgData.loaded + '#' + args.msgData.offset + '#' + args.msgData.total;
+        $scope.userData.Files = args.msgData.files;
+        //$scope.userData.fileChunkNumber = args.msgTime + '#' + args.msgData.loaded + '#' + args.msgData.offset + '#' + args.msgData.total;
         $scope.$apply();
     }
 
     if (args.msgType == "showUploadStatus"){
         $scope.userData.workerInfo = args.msgTime + '#' + args.msgData.getSize + '#' + args.msgData.sizeUploaded + '#' + args.msgData.progress;
+        $scope.userData.Files = args.msgData.files;
         $scope.$apply();
     }
 
@@ -258,8 +260,8 @@ function sendMessage(message) {
             }
 
 
-            $scope.userData.Files = fileInfo;
-            $scope.$apply();
+            //$scope.userData.Files = fileInfo;
+            //$scope.$apply();
             HelloWorldService.doWorkF(files);
 
             console.log($scope.fFiles);
