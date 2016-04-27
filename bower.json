@@ -1,0 +1,29 @@
+{
+  "name": "chat-event-source",
+  "description": "Chat-Event-Source",
+  "main": "server-simple.js",
+  "authors": [
+    "RR"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "char",
+    "event",
+    "webrtc",
+    "socketio"
+  ],
+  "homepage": "https://github.com/paulodiff/angularjs-eventsource-nodejs",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ng-file-upload": "~10.1.9",
+    "api-check": "^7.5.5",
+    "restangular": "~1.5.1",
+    "angular-formly": "^8.2.0"
+  }
+}

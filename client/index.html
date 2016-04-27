@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="theme-color" content="#db5945">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <link href="bower_components/please-wait/build/please-wait.css" rel="stylesheet">
     <title>**title**</title>
@@ -24,6 +25,22 @@
     <!-- http://mattslocum.github.io/ng-webworker/demo/ -->
     <script type="text/javascript" src="bower_components/ng-webworker/src/ng-webworker.js"></script>
 
+    <!-- Angular formly     http://docs.angular-formly.com/docs/learn-angular-formly -->
+    <script type="text/javascript" src="bower_components/api-check/dist/api-check.js"></script> <!-- must appear before formly.js -->
+    <script type="text/javascript" src="bower_components/angular-formly/dist/formly.js"></script>
+    <script type="text/javascript" src="bower_components/angular-formly-templates-ionic/dist/angular-formly-templates-ionic.js"></script>
+
+    <!-- angular-wizard-->
+    <script type="text/javascript" src="bower_components/angular-wizard/dist/angular-wizard.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="bower_components/angular-wizard/dist/angular-wizard.css">
+
+    <script src="socket.io/socket.io.js"></script>
+    <!-- <script src="js/signaler.js"></script> -->
+    <script src="js/FileBufferReader.js"></script>
+    <script src="js/RTCMultiConnection.js"></script>
+    
+
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
@@ -33,6 +50,13 @@
     <script src="js/controllers.js"></script>
     <script src="js/authControllers.js"></script>
     <script src="js/asyncUploadControllers.js"></script>
+    <script src="js/deviceOrientationControllers.js"></script>
+    <script src="js/displayControllers.js"></script>
+    <script src="js/queueControllers.js"></script>
+    <script src="js/mformControllers.js"></script>
+    <script src="js/mformWControllers.js"></script>
+    <script src="js/webrtcControllers.js"></script>
+    <script src="js/streamAudioControllers.js"></script>
     <script src="js/routes.js"></script>
     <script src="js/services.js"></script>
     <script src="js/directives.js"></script>
@@ -53,8 +77,6 @@
     </script>
     <!-- loader http://pathgather.github.io/please-wait/ END -->
 
-
-    
 
 
   <div>

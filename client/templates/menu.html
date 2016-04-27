@@ -18,15 +18,18 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close ng-click="login()">Login</ion-item>
+        <ion-item menu-close href="#/app/login">login</ion-item>
+        <ion-item menu-close href="#/app/mform">mform</ion-item>
+        <ion-item menu-close href="#/app/mformW">mformW</ion-item>
         <ion-item menu-close href="#/app/eventSource">eventSource</ion-item>
         <ion-item menu-close href="#/app/asyncUpload">asyncUpload</ion-item>
+        <ion-item menu-close href="#/app/deviceOrientation">deviceOrientation</ion-item>
+        <ion-item menu-close href="#/app/display">Display</ion-item>
+        <ion-item menu-close href="#/app/webrtc">webrtc</ion-item>
+        <ion-item menu-close href="#/app/audio">Audio</ion-item>
+        <ion-item menu-close href="#/app/queue">Queue</ion-item>
         <ion-item menu-close href="#/app/playlists">Playlists</ion-item>
-        <a href="/asyncUpload" class="item item-icon-left item-dark menu-close">/playlists</a>
-        <a href="#/app/playlists" class="item item-icon-left item-dark menu-close">#/app/playlists</a>
-        <a ui-sref="#/app/asyncUpload" class="item">Home1</a>
-        <a ui-sref="/eventSource" class="item">/eventSource</a>
-        <a ui-sref="#/app/asyncUpload" class="item">Home2</a>
+
       </ion-list>
     </ion-content>
   </ion-side-menu>

@@ -1,0 +1,225 @@
+<ion-view title="Stream Audio WebRTC">
+    <ion-content padding="true" class="has-header">
+       <div class="row">
+            <div class="col-33">
+                 RoomID
+            </div>
+            <div class="col-66">
+                <input type="text" id="room-id" placeholder="room-id" value="998">
+            </div>
+        </div>
+<button class="button button-royal"    id="open-room">Open</button>
+<button class="button button-positive" id="join-room">Join</button>
+<button class="button button-positive" id="open-or-join-room">Oper or Join</button>
+<hr>
+<div id="chat-container">
+    <input type="text" id="input-text-chat" placeholder="Enter Text Chat" disabled><br>
+    <div class="chat-output"></div>
+</div>
+
+<input type="file">
+<button class="button button-positive" id="audio-stream">Stream!</button>
+<button id="share-file">Share File</button>
+
+<div id="videos-container"></div>
+
+<div class="list">
+  <div class="item" ng-repeat="fItem in userData.Files">
+    {{fItem.name}}</br>{{fItem.size}}kb
+    <progress value="{{fItem._prevProgress}}" max="1"></progress>
+
+    <!--
+    <span class="item-note" style="color:green;">
+      {{fItem._prevProgress}}
+    </span>
+    -->
+
+  </div>
+</div>
+
+    <form class="list">
+       <div class="row">
+            <div class="col-33">
+                 Info:
+            </div>
+            <div class="col-66">
+                {{userData.workerInfo}}
+            </div>
+        </div>
+
+       <div class="row">
+            <div class="col-33">
+                 Info2:
+            </div>
+            <div class="col-66">
+                {{userData.workerInfo2}}
+            </div>
+        </div>
+
+
+        <div class="row" >
+        <div class="col">
+            <ion-radio ng-model="userData.player" ng-value="'P1'">P1</ion-radio>
+             <ion-radio ng-model="userData.player" ng-value="'P2'">P2</ion-radio>
+        </div>
+        </div>
+
+       <div class="item range">
+          <input type="range" min="0" max="500"  step="1" ng-model="userData.Xvalue"  ng-change="inviaDatiRTC()">
+        </div>
+
+<!--
+        <div class="item range">
+          <input type="range" min="0" max="500"  step="1" ng-model="userData.Xvalue"  ng-change="inviaDati()">
+        </div>
+-->
+      <div class="row">
+        <div class="col-50">
+            <button class="button button-positive button-block" ng-click="startAction()">Start</button>
+        </div>
+
+        <div class="col-50">
+            <button class="button button-assertive button-block" ng-click="showStatus()">Status</button>
+        </div>
+      </div>
+
+        <div class="row">
+        <div class="col-50">
+            <button class="button button-royal button-block" ng-click="setMaxVelue()">SetMax</button>
+        </div>
+        <div class="col-50">
+            <button class="button button-assertive button-block" ng-click="setMinValue()">SetMin</button>
+        </div>
+        </div>
+        
+      
+<!--
+            <label class="item item-input" name="UserName">
+                <span class="input-label">Name</span>
+                <input type="text" placeholder="UserName" ng-model="userData.userName">
+                <span class="badge badge-assertive">{{msg.freemem}}</span>
+            </label>
+            <label class="item item-input" name="ChannelName">
+                <span class="input-label">Channel</span>
+                <input type="text" placeholder="ChannelName" ng-model="userData.channelId">
+            </label>
+            <div class="item item-input item-button-right" name="MessageTXT">
+                <span class="input-label">Message</span>
+                <input type="text" placeholder="Message2Send" ng-model="userData.message">
+                <button class="button button-positive" ng-click="sendMessage2RoomAction()">
+                    <i class="icon ion-play"></i>
+                </button>
+            </div>
+            <div class="button-bar">
+                <button class="button button-balanced button-block  icon ion-play" ng-click="connectAction()"></button>
+                <button class="button button-assertive button-block  icon ion-stop" ng-click="disconnectAction()"></button>
+                <button class="button button-positive button-block  icon ion-stats-bars" ng-click="statsAction()"></button>
+
+                <button class="button button-calm button-block  icon ion-share" ng-click="sendMessageAction()"></button>
+                <button class="button button-calm button-block  icon ion-share" ng-click="fakeAction()"></button>
+
+-->                
+            </div>
+        <!--
+            <button ng-model="button" ng-disabled="getConnected">Button</button>
+        -->
+
+<!--
+        <label class="item item-input" name="user">
+            <span class="input-label">Users</span>
+            <select ng-model="currentUser" ng-options="item.userName for item in userList">
+                <option value="">-- choose user --</option>
+            </select>
+        </label>
+
+        <label class="item item-input" name="channel">
+            <span class="input-label">Channels</span>
+            <select ng-model="currentChannel" ng-options="item.channelId for item in channelList">
+                <option value="">-- choose channel --</option>
+            </select>
+        </label>
+
+            <label class="item item-input" name="userOnChannel">
+                <span class="input-label">userOnChannel</span>
+                <select ng-model="currentUserOnChannel" ng-options="item.userOnChannel for item in userOnChannelList">
+                    <option value="">-- choose Uuser-Channel --</option>
+                </select>
+            </label>
+
+-->
+
+<!--
+            <select ng-model="currentUser" ng-options="color.name group by color.shade for color in colors">
+            </select>
+  
+      
+            <label class="item item-input" name="Freemem">
+                <span class="input-label">heartbeat</span><textarea placeholder="Log">{{msg.freemem}}</textarea>
+            </label>
+   
+
+            <label class="item item-input" name="Log">
+                <span class="input-label">log</span><textarea placeholder="Log">{{userData.dataList}}</textarea>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">text</span><textarea placeholder="">{{userData.sourceMsg}}</textarea>
+            </label>
+
+    function getFile(){
+        document.getElementById("upfile").click();
+    }
+
+-->
+
+        </form>
+
+<!--
+        
+        <div class="item item-input item-button-right" name="MessageTXT">
+                <span class="input-label">WebWorker-Message</span>
+                <input type="text" placeholder="Message2Send" ng-model="userData.message">
+                <button class="button button-positive" ng-click="sendMessage2WebWorker()">
+                    <i class="icon ion-play"></i>
+                </button>
+        </div>
+
+        <div class="item item-input item-button-right" name="MessageTXT">
+                <span class="input-label">WebWorker-STATUS</span>
+                <input type="text" placeholder="Message2Send" ng-model="userData.message">
+                <button class="button button-positive" ng-click="showUploadStatusWorker()">
+                    <i class="icon ion-play"></i>
+                </button>
+        </div>
+
+        <div class="item item-input item-button-right" name="MessageTXT">
+                <span class="input-label">CONFIGURE-WORKER</span>
+                <input type="text" placeholder="Message2Send" ng-model="userData.message">
+                <button class="button button-positive" ng-click="configureWorker()">
+                    <i class="icon ion-play"></i>
+                </button>
+        </div>
+
+-->
+
+<!--
+        <div class="item">
+          <p style="text-align: right">Mario</p>
+          <h2 style="text-align: right">Marty McFly</h2>
+        </div>
+
+ng-class="{ 'fa-github'   : type === 0,
+                          'fa-linkedin' : type === 1,
+                          'fa-skype'    : type === 2,
+                          'fa-google'   : type === 3 }"></i>
+
+ng-style="myvar === 0 && {'background-color': 'red'} ||
+                  myvar === 1 && {'background-color': 'green'} ||
+                  myvar === 2 && {'background-color': 'yellow'}"
+
+
+-->
+    <div class="log-output"></div>
+
+
+    </ion-content>
+</ion-view>

@@ -1,7 +1,9 @@
 var PORT = process.env.PORT || 9988;
 var express = require('express');
+//var app = require('express').createServer();
+//var app = require('express')();
+//var server = require('http').Server(app);
 var cors = require('cors');
-var http = require('http');
 var bodyParser = require('body-parser');
 var os = require('os');
 var fs = require('fs');
@@ -9,13 +11,26 @@ var path = require('path');
 var util = require('util');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
- 
+
+var Queue = require('bull');
+var toureiro = require('toureiro');
+
+
+var http = require('http');
+var app = require('express')();
+var server  = require('http').createServer(app);
+//var server = require('http').Server(app);
+//var io = require('socket.io')(server);
+//var io  = require('socket.io').listen(server);
+
 // create the app
-var app = express();
- 
+//var app = express().createServer();
+
+// socket.io 
+//var io = require('socket.io')(app);
+
 app.use(bodyParser.json());
 app.use(require("morgan")("short"));
-
 
 //app.set('port', process.env.PORT || 3000);
 //app.set('views', __dirname + '/views');
@@ -28,19 +43,225 @@ app.use(require("morgan")("short"));
 //app.use(express.static(__dirname + "./client"));
 console.log(path.join(__dirname, './client'));
 app.use(express.static(path.join(__dirname, './client')));
+
+
+
+app.use('/queue', require('./routes/queue'));
+
+
+app.use('/toureiro', toureiro({
+  // Options to be passed directly to redis.createClient(),
+  // see https://github.com/NodeRedis/node_redis#rediscreateclient
+  redis: {
+    // Redis host
+    host: '10.10.128.40',
+    // Port
+    port: 6379,
+    // DB number
+    db: 0,
+    password: 'password',
+    auth_pass: 'password'
+
+
+    // Other redis options...
+  }
+}));
  
 // simple standard errorhandler
 //app.configure('development', function(){
 //  app.use(express.errorHandler());
 //});
+
+// ------------------------  socket
+
+/*
+
+var listOfRooms = {};
+
+
+io.on('connection', 
+  function (socket) {
+    socket.emit('news', { hello: 'world' });
+
+    socket.on('subscribe', 
+                  function (data) {
+                      console.log('subscribe');
+                      console.log(data);
+                  }
+              );
+   socket.on('infoEvent', 
+                  function (data) {
+                      console.log('infoEvent');
+                      console.log(data);
+                      console.log('emit display');
+                      io.sockets.emit('display', { data: data });
+                  }
+              );
+
+// ################################ reliable-signaler     
+
+   var currentUser = socket;
+
+        socket.on('keep-in-server', function(roomid, callback) {
+            console.log('keep-in-server', roomid);
+            listOfRooms[roomid] = roomid;
+            currentUser.roomid = roomid;
+            if(callback) callback();
+        });
+
+        socket.on('get-session-info', function(roomid, callback) {
+            console.log('get-session-info', roomid);
+            console.log(roomid, 'in list ..',!!listOfRooms[roomid]);
+            if (!!listOfRooms[roomid]) {
+                callback(listOfRooms[roomid]);
+                return;
+            }
+
+            (function recursive() {
+                if (currentUser && listOfRooms[roomid]) {
+                    callback(listOfRooms[roomid]);
+                    return
+                }
+                setTimeout(recursive, 1000);
+            })();
+        });
+
+        socket.on('message', function(message) {
+            console.log('message', message);
+            socket.broadcast.emit('message', message);
+        });
+
+        socket.on('disconnect', function() {
+             console.log('disconnect');
+            if (!currentUser) return;
+
+            // autoCloseEntireSession = true;
+            if (currentUser && currentUser.roomid && listOfRooms[currentUser.roomid]) {
+                delete listOfRooms[currentUser.roomid];
+            }
+
+            currentUser = null;
+        });
+        
+        //   if(socketCallback) {        socketCallback(socket);      }
+        
+});
+
+*/
+
  
 var openConnections = [];
 
 // get an instance of the router for api routes
 var apiRoutes = express.Router(); 
+
+apiRoutes.get("/createQueue", function(req, res) {
+  console.log('GET:/queue');
+
+  var Queue = require('bull');
+
+  redis_opts = {
+
+    password: 'password',
+    auth_pass: 'password',
+    db: 0
+  };
+
+var videoQueue = Queue('video transcoding', 6379, '10.10.128.40', redis_opts);
+var audioQueue = Queue('audio transcoding', 6379, '10.10.128.40', redis_opts);
+var imageQueue = Queue('image transcoding', 6379, '10.10.128.40', redis_opts);
+
+videoQueue.process(function(job, done){
+
+
+  console.log('processing v1');
+  // job.data contains the custom data passed when the job was created
+  // job.jobId contains id of this job.
+
+  // transcode video asynchronously and report progress
+  job.progress(42);
+
+  // call done when finished
+  done();
+
+  // or give a error if error
+  done(Error('error transcoding'));
+
+  // or pass it a result
+  done(null, { framerate: 29.5 /* etc... */ });
+
+  // If the job throws an unhandled exception it is also handled correctly
+  throw (Error('some unexpected error'));
+});
+
+audioQueue.process(function(job, done){
+
+  console.log('processing a1');
+
+  // transcode audio asynchronously and report progress
+  job.progress(42);
+
+  // call done when finished
+  done();
+
+  // or give a error if error
+  done(Error('error transcoding'));
+
+  // or pass it a result
+  done(null, { samplerate: 48000 /* etc... */ });
+
+  // If the job throws an unhandled exception it is also handled correctly
+  throw (Error('some unexpected error'));
+});
+
+imageQueue.process(function(job, done){
+
+  console.log('processing img1');
+
+  // transcode image asynchronously and report progress
+  job.progress(42);
+
+  // call done when finished
+  done();
+
+  // or give a error if error
+  done(Error('error transcoding'));
+
+  // or pass it a result
+  done(null, { width: 1280, height: 720 /* etc... */ });
+
+  // If the job throws an unhandled exception it is also handled correctly
+  throw (Error('some unexpected error'));
+});
+
+videoQueue.pause().then(function(){
+  console.log('v1 paused!');
+
+  videoQueue.add({video: 'http://example.com/video1.mov'});
+  audioQueue.add({audio: 'http://example.com/audio1.mp3'});
+  imageQueue.add({image: 'http://example.com/image1.tiff'});
+
+});
+
+videoQueue.count().then(function(vvv){
+  console.log('count');
+  console.log(vvv);
+});
+
+
+
+
+
+
+  res.status(241).send({msg : 'queue ok'});
+});
+
+
+
  
 apiRoutes.post("/status", function(req, res) {
   console.log('POST:/status');
+
   res.status(241).send();
 });
 
@@ -317,6 +538,61 @@ apiRoutes.get('/download/:identifier', function(req, res) {
 // apply the routes to our application with the prefix /api
 app.use('/rtmsg', apiRoutes);
 
+server.listen(PORT, function() {
+  console.log("listening on %d", PORT);
+}); // not 'app.listen'!
+
+srv = server.listen(process.env.PORT || 9908, process.env.IP || "0.0.0.0", function() {
+    var addr = server.address();
+    console.log("Server listening at ", addr.address + ":" + addr.port, " ", new Date());
+});
+
+require('./Signaling-Server.js')(srv, function(socket) {
+    try {
+        var params = socket.handshake.query;
+        console.log(params);
+
+        // "socket" object is totally in your own hands!
+        // do whatever you want!
+
+        // in your HTML page, you can access socket as following:
+        // connection.socketCustomEvent = 'custom-message';
+        // var socket = connection.getSocket();
+        // socket.emit(connection.socketCustomEvent, { test: true });
+
+        if (!params.socketCustomEvent) {
+            params.socketCustomEvent = 'custom-message';
+        }
+
+
+        socket.on('infoEvent',function(message) {
+          console.log('infoEvent emit...',message);
+        });
+
+        socket.on(params.socketCustomEvent, function(message) {
+            try {
+                console.log('emit',params.socketCustomEvent);
+                console.log('emit',message);
+                socket.broadcast.emit(params.socketCustomEvent, message);
+            } catch (e) {
+              console.log('Errore emit...',e);
+            }
+        });
+    } catch (e) {
+      console.log('Errore handshake...',e);
+    }
+});
+
+
+/*
+app = app.listen(process.env.PORT || 9001, process.env.IP || "0.0.0.0", function() {
+    var addr = app.address();
+    console.log("Server listening at", addr.address + ":" + addr.port);
+});
+*/
+
+/*
 app.listen(PORT, function() {
   console.log("listening on %d", PORT);
 });
+*/

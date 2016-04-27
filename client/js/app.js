@@ -12,6 +12,9 @@ angular.module('app', ['ionic',
                        'app.directives', 
                        'restangular',
                        'ngWebworker', 
+                       'formly',
+                       'formlyIonic',
+                       'mgo-angular-wizard',
                        'app.config'])
 
 

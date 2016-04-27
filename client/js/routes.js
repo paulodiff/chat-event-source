@@ -26,6 +26,87 @@ angular.module('app.routes', [])
   })
 
 
+  .state('app.login', {
+    url: '/login',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/login.html',
+        controller: 'eventSourceCtrl'
+      }
+    }
+  })
+
+  .state('app.deviceOrientation', {
+    url: '/deviceOrientation',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/deviceOrientation.html',
+        controller: 'deviceOrientationCtrl'
+      }
+    }
+  })
+
+  .state('app.mform', {
+    url: '/mform',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/mform.html',
+        controller: 'mformCtrl'
+      }
+    }
+  })
+
+  .state('app.mformW', {
+    url: '/mformW',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/mformW.html',
+        controller: 'mformWCtrl'
+      }
+    }
+  })
+
+  .state('app.webrtc', {
+    url: '/webrtc',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/webrtc.html',
+        controller: 'webrtcCtrl'
+      }
+    }
+  })
+
+  .state('app.audio', {
+    url: '/audio',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/streamAudio.html',
+        controller: 'streamAudioCtrl'
+      }
+    }
+  })
+
+  .state('app.queue', {
+    url: '/queue',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/queue.html',
+        controller: 'queueCtrl'
+      }
+    }
+  })
+
+  .state('app.display', {
+    url: '/display',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/display.html',
+        controller: 'displayCtrl'
+      }
+    }
+  })
+
+
  .state('app.asyncUpload', {
     url: '/asyncUpload',
     views: {
@@ -51,6 +132,6 @@ angular.module('app.routes', [])
   // if none of the above states are matched, use this as the fallback
   // $urlRouterProvider.otherwise('/page7');
 
-  $urlRouterProvider.otherwise('/app/asyncUpload');
+  $urlRouterProvider.otherwise('/app/mformW');
 
 });

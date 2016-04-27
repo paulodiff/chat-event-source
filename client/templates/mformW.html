@@ -1,0 +1,138 @@
+<ion-view title="mformW">
+    <ion-content padding="true" class="has-header">
+         
+
+        <h3>Intestazione</h3>
+        
+
+
+       <form name="vm.form">
+        <wizard on-finish="vm.finishWizard()" 
+                hide-indicators="true"
+                current-step="vm.currentStep"
+                > 
+          <wz-step title="Step 1" canenter="vm.enterValidation()" canexit="vm.exitValidation(vm.forms.step1)">
+            
+            <div class="card">
+              <div class="item item-text-wrap">
+                <b>Passo 1. Inserire un indicazioni</b>
+                <p>This is a basic Card which contains an item that has wrapping text.</p>
+              </div>
+            </div>
+
+
+
+            <formly-form model="vm.model" fields="vm.fields.step1" form="vm.forms.step1">
+                 <button type="submit" ng-disabled="vm.forms.step1.$invalid" wz-next="setData()" class="button button-balanced button-block icon">Successivo</button>
+           </formly-form>
+          </wz-step>
+
+          <wz-step title="Step 2" canexit="vm.exitValidation(vm.forms.step2)">
+
+           <div class="card">
+              <div class="item item-text-wrap">
+                <b>Passo 2. Inserire un indicazioni</b>
+                <p>Inserire i dati relativi al form sottostante</p>
+              </div>
+            </div>
+
+            <formly-form model="vm.model" fields="vm.fields.step2" form="vm.forms.step2">
+
+        <div class="row">
+        <div class="col-50">
+                <button type="submit" wz-previous class="button button-calm button-block icon">Precedente
+                        <ion-icon name='arrow-forward'></ion-icon>
+                </button>
+        </div>
+        <div class="col-50">
+                <button type="submit" ng-disabled="vm.forms.step2.$invalid" wz-next class="button button-balanced button-block icon">Successivo</button>
+        </div>
+        </div>
+
+            </formly-form>
+          </wz-step>
+
+          <wz-step title="Step 3" canexit="vm.exitValidation(vm.forms.step3)">
+           <div class="card">
+              <div class="item item-text-wrap">
+                <b>Passo 3. Inserire un indicazioni</b>
+                <p>Inserire i dati relativi al form sottostante</p>
+              </div>
+            </div>
+            <formly-form model="vm.model" fields="vm.fields.step3" form="vm.forms.step3">
+
+        <div class="row">
+        <div class="col-50">
+                <button type="submit" wz-previous class="button button-calm button-block">Precedente</button>
+        </div>
+        <div class="col-50">
+                <button type="submit" wz-next ng-disabled="vm.forms.step3.$invalid"  class="button button-balanced button-block icon">Successivo</button>
+        </div>
+        </div>
+
+            </formly-form>
+          </wz-step>
+
+
+          <wz-step title="Confirm">
+
+           <div class="card">
+              <div class="item item-text-wrap">
+                <b>Passo finale </b>
+                <p>Rivedere tutti i dati</p>
+              </div>
+            </div>
+
+        <div class="card">
+            <h2>Riepilogo dati</h2>
+            <div>Username: {{vm.model.email}}</div>
+            <div>First Name: {{vm.model.firstName}}</div>
+            <div>Last Name: {{vm.model.lastName}}</div>
+        </div>            
+        <div class="row">
+        <div class="col-50">
+                <button type="submit" wz-previous class="button button-calm button-block icon">Precedente
+                        <ion-icon name='arrow-forward'></ion-icon>
+                </button>
+        </div>
+        <div class="col-50">
+                <button type="submit" ng-disabled="vm.forms.step3.$invalid" wz-next class="button button-balanced button-block icon">Invia i dati!</button>
+        </div>
+        </div>
+            
+          </wz-step>
+        </wizard>
+      </form>
+
+      <!--
+      <hr />
+      <h2>Model</h2>
+      <pre>{{vm.model | json}}</pre>
+      <h2>Fields <small>(note, functions are not shown)</small></h2>
+      <pre>{{vm.originalFields | json}}</pre>
+      <h2>Form</h2>
+      <pre>{{vm.form | json}}</pre>
+      -->
+    </div>
+
+
+<!--
+        <div class="item">
+          <p style="text-align: right">Mario</p>
+          <h2 style="text-align: right">Marty McFly</h2>
+        </div>
+
+ng-class="{ 'fa-github'   : type === 0,
+                          'fa-linkedin' : type === 1,
+                          'fa-skype'    : type === 2,
+                          'fa-google'   : type === 3 }"></i>
+
+ng-style="myvar === 0 && {'background-color': 'red'} ||
+                  myvar === 1 && {'background-color': 'green'} ||
+                  myvar === 2 && {'background-color': 'yellow'}"
+
+
+-->
+
+    </ion-content>
+</ion-view>

@@ -1,0 +1,36 @@
+<ion-view title="mform">
+    <ion-content padding="true" class="has-header">
+         
+
+        <h3>Passo n.{{vm.model.formStep}}</h3>
+        <h4>Descrizione di aiuto per il passo  n.{{vm.model.formStep}}</h4>
+
+
+        <formly-form model="vm.model" fields="vm.userFields">
+          <div class="button-bar">
+                <button class="button button-balanced button-block  icon ion-arrow-left-a" ng-click="prevAction()" id="prevButton"></button>
+                <button class="button button-assertive button-block  icon ion-arrow-right-a" ng-click="nextAction()" id="nextButton"></button>
+            </div>
+        </formly-form>
+
+
+<!--
+        <div class="item">
+          <p style="text-align: right">Mario</p>
+          <h2 style="text-align: right">Marty McFly</h2>
+        </div>
+
+ng-class="{ 'fa-github'   : type === 0,
+                          'fa-linkedin' : type === 1,
+                          'fa-skype'    : type === 2,
+                          'fa-google'   : type === 3 }"></i>
+
+ng-style="myvar === 0 && {'background-color': 'red'} ||
+                  myvar === 1 && {'background-color': 'green'} ||
+                  myvar === 2 && {'background-color': 'yellow'}"
+
+
+-->
+
+    </ion-content>
+</ion-view>

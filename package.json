@@ -1,0 +1,29 @@
+{
+  "name": "chat-event-source",
+  "version": "1.0.0",
+  "description": "Chat-Event-Source",
+  "main": "server-simple.js",
+  "dependencies": {
+    "socket.io": "^1.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulodiff/angularjs-eventsource-nodejs.git"
+  },
+  "keywords": [
+    "char",
+    "event",
+    "webrtc",
+    "socketio"
+  ],
+  "author": "RR",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paulodiff/angularjs-eventsource-nodejs/issues"
+  },
+  "homepage": "https://github.com/paulodiff/angularjs-eventsource-nodejs#readme"
+}
